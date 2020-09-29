@@ -98,6 +98,7 @@ for i in range(flights['N']):
         break
     else: pass
 
+nseats_to = []
 to_flights_possible = []
 for i in range(nmin,nmax):
     cond1 = flights['date'][i]+dt.timedelta(days=daysstay-daysstaypm)<=latest_return_date
@@ -113,7 +114,9 @@ for i in range(nmin,nmax):
                 #print('\t------')
                 #print('LYR - NYA ', flights['date'][i])
                 to_flights_possible.append(flights['date'][i])
+                nseats_to.append(flights['seats'][i])
 
+nseats_from = []
 from_flights_possible = []
 for i in range(nmin,nmax):
     cond1 = flights['date'][i]-dt.timedelta(days=daysstay+daysstaypm)<=latest_return_date
@@ -129,15 +132,16 @@ for i in range(nmin,nmax):
                 #print('\t------')
                 #print('NYA - LYR ', flights['date'][i])
                 from_flights_possible.append(flights['date'][i])
+                nseats_from.append(flights['seats'][i])
 
 print('\n#####################################\n')
-for i in to_flights_possible:
-    for j in from_flights_possible:
+for ii, i in enumerate(to_flights_possible):
+    for jj, j in enumerate(from_flights_possible):
         cond1 = j>=i+dt.timedelta(days=daysstay-daysstaypm)
         cond2 = j<=i+dt.timedelta(days=daysstay+daysstaypm)
         if cond1 and cond2:
             #print('\t------')
-            print('NYA - LYR ', i)
-            print('LYR - NYA ', j, '\n')
+            print('LYR - NYA ', i, 'seats available:', nseats_to[ii])
+            print('NYA - LYR ', j, 'seats available:', nseats_from[jj],'\n')
         else: pass
 print('\n#####################################\n')
